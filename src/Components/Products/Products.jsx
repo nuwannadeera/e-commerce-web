@@ -3,14 +3,9 @@ import React from 'react'
 import Product from './Product/Product'
 import useStyles from './styles'
 
-const products = [
-    { id: 1, name: 'shoes', description: 'deck shoes', price: 'Rs 4500.00' },
-    { id: 2, name: 'tv', description: 'smart TV', price: 'Rs 60000.00' }
-]
-
-function Products() {
+function Products({products}) {
+    console.log(products);
     const classes = useStyles();
-
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />

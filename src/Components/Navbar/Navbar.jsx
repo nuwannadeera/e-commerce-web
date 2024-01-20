@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, IconButton, Badge, Typography } from '@material-ui/core';
+import { ShoppingCart } from '@material-ui/icons';
 import React from 'react'
 import logo from '../../Images/lk_store.png'
-import { ShoppingCart } from '@material-ui/icons';
 import useStyles from './styles';
 
 function Navbar() {

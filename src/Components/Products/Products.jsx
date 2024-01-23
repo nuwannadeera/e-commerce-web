@@ -3,8 +3,7 @@ import React from 'react'
 import Product from './Product/Product'
 import useStyles from './styles'
 
-function Products({products}) {
-    console.log(products);
+function Products({ products, onAddToCart }) {
     const classes = useStyles();
     return (
         <main className={classes.content}>
@@ -13,7 +12,7 @@ function Products({products}) {
                 {
                     products.map((product) => (
                         <Grid key={product.id} item xs={12} sm={6} md={4} lg={3}>
-                            <Product product={product} />
+                            <Product product={product} onAddToCart={onAddToCart} />
                         </Grid>
                     ))
                 }

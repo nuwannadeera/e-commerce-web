@@ -3,6 +3,8 @@ import Products from './Components/Products/Products'
 import Navbar from './Components/Navbar/Navbar'
 import { commerce } from './lib/commerce'
 import Cart from './Components/Cart/Cart';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import { Switch } from '@material-ui/core';
 
 function App() {
   const [products, setProduct] = useState([]);
@@ -26,17 +28,23 @@ function App() {
   }
 
   useEffect(() => {
-    // getAllproducts();
+    getAllproducts();
     fetchCart();
   }, [])
 
 
   return (
-    <> 
-      <Navbar totalItems={cart.total_items}/>
-      {/* <Products products={products} onAddToCart={handleAddToCart} /> */}
-      <Cart cart={cart}/>
-    </>
+    <Router>
+      <Navbar totalItems={cart.total_items} />
+      <Routes>
+        <Route path="/" element={
+        <Products products={products} onAddToCart={handleAddToCart} />
+        } />
+        <Route path="/cart" element={
+        <Cart cart={cart} />
+        } />
+      </Routes>
+    </Router>
   )
 }
 

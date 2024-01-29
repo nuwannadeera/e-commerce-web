@@ -4,6 +4,7 @@ import Navbar from './Components/Navbar/Navbar'
 import { commerce } from './lib/commerce'
 import Cart from './Components/Cart/Cart';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CheckoutForm from './Components/CheckoutForm/Checkout/CheckoutForm';
 // import { Switch } from '@material-ui/core';
 
 function App() {
@@ -47,8 +48,7 @@ function App() {
     getAllproducts();
     fetchCart();
   }, [])
-
-  console.log(cart);
+  
 
   return (
     <Router>
@@ -62,6 +62,9 @@ function App() {
         handleUpdateCartQty={handleUpdateCartQty}
         handleRemoveFromCart={handleRemoveFromCart}
         handleEmptyCart={handleEmptyCart}/>
+        } />
+        <Route path="/checkout" element={
+        <CheckoutForm cart={cart}/>
         } />
       </Routes>
     </Router>

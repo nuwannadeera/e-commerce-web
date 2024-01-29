@@ -34,7 +34,7 @@ function Cart({ cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart
                         <Button className={classes.emptyButton} size="large" type="button" variant="contained" 
                         color="secondary" onClick={handleEmptyCart}>Empty cart</Button>
                         <Button className={classes.checkoutButton} size="large" type="button" variant="contained" 
-                        color="primary">Checkout</Button>
+                        color="primary" component={Link} to="/checkout">Checkout</Button>
                     </div>
                 </div>
             </>

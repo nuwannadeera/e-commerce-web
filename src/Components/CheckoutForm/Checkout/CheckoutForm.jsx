@@ -16,7 +16,6 @@ function CheckoutForm({ cart }) {
         const generateToken = async () => {
             try {
                 const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
-                // console.log(token);
                 setCheckoutToken(token);
             } catch (error) {
 
@@ -25,8 +24,9 @@ function CheckoutForm({ cart }) {
         generateToken();
     }, [cart])
 
-    const Form = () => activeStep === 0 ? <AddressForm checkoutToken={checkoutToken}/> : <PaymentForm />
- 
+    const Form = () => activeStep === 0 ?
+        <AddressForm checkoutToken={checkoutToken} /> : <PaymentForm />
+
     const Confirmation = () => (
         <div>
             <h1>heloo</h1>

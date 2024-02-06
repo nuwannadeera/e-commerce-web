@@ -8,7 +8,6 @@ function FormInput({ name, label }) {
     return (
         <Grid item xs={12} sm={6}>
             {/* you tube way comes error */}
-
             {/* <Controller
                 as={TextField}
                 control={control}

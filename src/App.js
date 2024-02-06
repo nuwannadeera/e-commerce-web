@@ -10,6 +10,8 @@ import CheckoutForm from './Components/CheckoutForm/Checkout/CheckoutForm';
 function App() {
   const [products, setProduct] = useState([]);
   const [cart, setCart] = useState({});
+  const [order, setOrder] = useState({});
+  const [errorMsg, setErrorMsg] = useState('');
 
   const getAllproducts = async () => {
     const { data } = await commerce.products.list();
@@ -29,7 +31,7 @@ function App() {
   }
 
   const handleUpdateCartQty = async (productId, quantity) => {
-    const item = await commerce.cart.update(productId, {quantity});
+    const item = await commerce.cart.update(productId, { quantity });
     setCart(item);
   }
 
@@ -43,28 +45,48 @@ function App() {
     setCart(item);
   }
 
+  const refreshCart = async () => {
+    const newCart = await commerce.cart.refresh();
+    setCart(newCart);
+  };
+
+  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
+      setOrder(incomingOrder);
+      refreshCart();
+    } catch (error) {
+      setErrorMsg(error.data.error.message);
+    }
+  }
+
 
   useEffect(() => {
     getAllproducts();
     fetchCart();
   }, [])
-  
+
 
   return (
     <Router>
       <Navbar totalItems={cart.total_items} />
       <Routes>
         <Route path="/" element={
-        <Products products={products} onAddToCart={handleAddToCart} />
+          <Products products={products} onAddToCart={handleAddToCart} />
         } />
         <Route path="/cart" element={
-        <Cart cart={cart} 
-        handleUpdateCartQty={handleUpdateCartQty}
-        handleRemoveFromCart={handleRemoveFromCart}
-        handleEmptyCart={handleEmptyCart}/>
+          <Cart cart={cart}
+            handleUpdateCartQty={handleUpdateCartQty}
+            handleRemoveFromCart={handleRemoveFromCart}
+            handleEmptyCart={handleEmptyCart} />
         } />
         <Route path="/checkout" element={
-        <CheckoutForm cart={cart}/>
+          <CheckoutForm
+            cart={cart}
+            order={order}
+            onCaptureCheckout={handleCaptureCheckout}
+            error={errorMsg}
+          />
         } />
       </Routes>
     </Router>

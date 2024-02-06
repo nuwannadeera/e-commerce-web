@@ -4,10 +4,11 @@ import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgr
 import AddressForm from '../AddressForm'
 import PaymentForm from '../PaymentForm'
 import { commerce } from '../../../lib/commerce';
+import { Link, useHistory } from 'react-router-dom';
 
 const steps = ['Shipping address', 'Payment details'];
 
-function CheckoutForm({ cart }) {
+function CheckoutForm({ cart, order, onCaptureCheckout, error }) {
     const classes = useStyle();
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
@@ -19,7 +20,7 @@ function CheckoutForm({ cart }) {
                 const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
                 setCheckoutToken(token);
             } catch (error) {
-
+                console.log(error);
             }
         }
         generateToken();
@@ -36,16 +37,41 @@ function CheckoutForm({ cart }) {
 
 
 
+    let Confirmation = () => (order.customer ? (
+        <>
+            <div>
+                <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}!</Typography>
+                <Divider className={classes.divider} />
+                <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
+            </div>
+            <br />
+            <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+        </>
+    ) : (
+        <div className={classes.spinner}>
+            <CircularProgress />
+        </div>
+    ));
+
+    if (error) {
+        Confirmation = () => (
+            <>
+                <Typography variant="h5">Error: {error}</Typography>
+                <br />
+                <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+            </>
+        );
+    }
 
     const Form = () => activeStep === 0 ?
-        <AddressForm checkoutToken={checkoutToken} next={next} /> 
-        : <PaymentForm shippingData={shippingData} checkoutToken={checkoutToken}/>
+        <AddressForm checkoutToken={checkoutToken} next={next} />
+        : <PaymentForm
+            shippingData={shippingData}
+            checkoutToken={checkoutToken}
+            backStep={backStep}
+            nextStep={nextStep}
+            onCaptureCheckout={onCaptureCheckout} />
 
-    const Confirmation = () => (
-        <div>
-            <h1>heloo</h1>
-        </div>
-    )
 
     return (
         <>

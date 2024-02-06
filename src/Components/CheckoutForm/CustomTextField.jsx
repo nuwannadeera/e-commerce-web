@@ -25,6 +25,7 @@ function FormInput({ name, label }) {
                             {...field}
                             fullWidth
                             label={label}
+                            defaultValue=""
                         />
                     )}
                 control={control}

@@ -6,7 +6,7 @@ import Review from './Review';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-function PaymentForm({ checkoutToken, shippingData, backStep, onCaptureCheckout, nextStep }) {
+function PaymentForm({ checkoutToken, shippingData, backStep, onCaptureCheckout, nextStep, timeout }) {
 
   const handleSubmit = async (event, elements, stripe) => {
     // stop refreshing wehn button click
@@ -43,6 +43,7 @@ function PaymentForm({ checkoutToken, shippingData, backStep, onCaptureCheckout,
         },
       }
       onCaptureCheckout(checkoutToken.id, orderData);
+      timeout()
       nextStep()
     }
   }

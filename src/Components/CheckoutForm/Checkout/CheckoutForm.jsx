@@ -4,15 +4,17 @@ import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgr
 import AddressForm from '../AddressForm'
 import PaymentForm from '../PaymentForm'
 import { commerce } from '../../../lib/commerce';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const steps = ['Shipping address', 'Payment details'];
 
 function CheckoutForm({ cart, order, onCaptureCheckout, error }) {
     const classes = useStyle();
+
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
     const [shippingData, setShippingData] = useState({});
+    const [isFinished, setIsFinished] = useState(false);
 
     useEffect(() => {
         const generateToken = async () => {
@@ -34,7 +36,11 @@ function CheckoutForm({ cart, order, onCaptureCheckout, error }) {
         nextStep();
     }
 
-
+    const timeout = () => {
+        setTimeout(() => {
+            setIsFinished(true);
+        }, 3000);
+    }
 
 
     let Confirmation = () => (order.customer ? (
@@ -43,6 +49,15 @@ function CheckoutForm({ cart, order, onCaptureCheckout, error }) {
                 <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}!</Typography>
                 <Divider className={classes.divider} />
                 <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
+            </div>
+            <br />
+            <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+        </>
+    ) : isFinished ? (
+        <>
+            <div>
+                <Typography variant="h5">Thank you for your purchase!</Typography>
+                <Divider className={classes.divider} />
             </div>
             <br />
             <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
@@ -70,8 +85,8 @@ function CheckoutForm({ cart, order, onCaptureCheckout, error }) {
             checkoutToken={checkoutToken}
             backStep={backStep}
             nextStep={nextStep}
-            onCaptureCheckout={onCaptureCheckout} />
-
+            onCaptureCheckout={onCaptureCheckout}
+            timeout={timeout} />
 
     return (
         <>
